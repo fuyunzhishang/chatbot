@@ -1,3 +1,4 @@
+import { request } from "http";
 import { Configuration, OpenAIApi } from "openai";
 
 const configuration = new Configuration({
@@ -15,25 +16,22 @@ export default async function (req, res) {
     return;
   }
 
-  const animal = req.body.animal || '';
-  if (animal.trim().length === 0) {
+  if (!req.body) {
     res.status(400).json({
       error: {
-        message: "Please enter a valid animal",
+        message: "请输入你的问题",
       }
     });
     return;
   }
 
-  console.log(req)
-
   try {
-    const completion = await openai.createCompletion({
-      model: "text-davinci-003",
-      prompt: generatePrompt(animal),
-      temperature: 0.6,
-    });
-    res.status(200).json({ result: completion.data.choices[0].text });
+    const res = await openai.createChatCompletion({
+      model: "gpt-3.5-turbo",
+      messages: req.body
+    })
+    console.log(res, 2222)
+    // res.status(200).json({ result: completion.data.choices[0].text });
   } catch(error) {
     // Consider adjusting the error handling logic for your use case
     if (error.response) {
