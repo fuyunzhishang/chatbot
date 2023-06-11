@@ -6,21 +6,20 @@ export default function Home() {
   const [userInput, setUserInput] = useState("");
   const [result, setResult] = useState();
 
-  const messages = [{ role: "system", content: '' }];  
+  const messages = [{"role": "system", "content": "You are a helpful assistant."}];  
   async function onSubmit(event) {
     event.preventDefault();
     messages.push({ role: "user", content: userInput });  
     try {
-      const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      const response = await fetch("/api/generate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: Bearer  
         },
         body: JSON.stringify(messages),
       });
 
-      console.log(response, 1111)
+      console.log(response)
 
       const data = await response.json();
       if (response.status !== 200) {
@@ -45,7 +44,7 @@ export default function Home() {
 
       <main className={styles.main}>
         <img src="logo.jpeg" className={styles.icon} />
-        <h3>情感聊天对话生成</h3>
+        <h3>情感聊天话术生成</h3>
         <form onSubmit={onSubmit}>
           <input
             type="text"
@@ -54,7 +53,7 @@ export default function Home() {
             value={userInput}
             onChange={(e) => setUserInput(e.target.value)}
           />
-          <input type="submit" value="生成对话" />
+          <input type="submit" value="生成话术" />
         </form>
         <div className={styles.result}>{result}</div>
       </main>
